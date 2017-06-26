@@ -64,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
             final TaskVersion previous = taskVersionRepository.findById(taskVersionId);
             taskVersion = new TaskVersion(idGenerator.postfixId(TaskVersion.class, x->x.uuid()), task, previous);
         }
-        return taskVersionRepository.save(taskVersion, 2);
+        return taskVersionRepository.save(taskVersion);
     }
 
 }

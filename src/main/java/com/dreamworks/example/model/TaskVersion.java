@@ -40,8 +40,8 @@ public class TaskVersion extends AbstractEntity implements UTI {
         setTask(task);
         setCreatedOn(new Date());
 
-        setParent(null);
-        setChilds(new ArrayList<>());
+//        setParent(null);
+//        setChilds(new ArrayList<>());
 
         task.addTaskVersion(this);
     }

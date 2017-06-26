@@ -39,8 +39,7 @@ public class TaskServiceTests {
     private SessionFactory sessionFactory;
 
 	@Before
-	public void setUp() throws Exception {
-	}
+	public void setUp() throws Exception {}
 
 	@After
 	public void tearDown() throws Exception {
@@ -54,37 +53,42 @@ public class TaskServiceTests {
         // = We create a task.
         Task task = taskService.create(new TaskPayload("task"));
 
-        // = We create a task version and link-it to the Task object.
+        // = We create a task version and we establish the relation with the task.
         TaskVersion version1 = taskService.create(task.getId(), null, new TaskVersionPayload());
 
         // = We create a new task linked to the previous task version (version1) and also linked to the task.
         TaskVersion version2 = taskService.create(task.getId(), version1.getId(), new TaskVersionPayload());
 
-        // Asserts on created objects.
+        // ====== Asserts on created objects. ======= //
 
-        // = Ensure parent is wired up directly
+        // = Ensure parent is wired up correctly.
         Assert.assertEquals(version1, version2.getParent());
 
-        // = Ensure there are no children versions
+        // = Ensure the version 1 has only 1 children.
         Assert.assertEquals(1, version2.getParent().getChilds().size());
+
+        // = Ensure the version 2 doesnt have any children.
         Assert.assertEquals(0, version2.getChilds().size());
 
-        // Retrieve what is in the store and Asserts again with the same checks.
+        // These asserts are Ok cause we are inspecting the objects we have in memory.
+        // Lets see what was saved in the Store...
 
-        // = Get the task by ID.
+        // ======= Retrieve what is in the store and Asserts again with the same checks. ======= //
+
+        // = Get the task by ID (This is our generated ID and not the @GraphId).
         Task storedTask = taskService.get(task.getId());
 
         // = Ensure the the task has 2 versions
         Assert.assertTrue(storedTask.hasVersions());
-        Assert.assertEquals(1, storedTask.getVersions().size());
+        Assert.assertEquals(2, storedTask.getVersions().size());
 
         // = Lets get what is in the store.
-        TaskVersion storedVersion2 = taskVersionService.get(version2.getId());
+        TaskVersion storedTaskVersion2 = taskVersionService.get(version2.getId());
 
         // = Check that parent of version2 has a child.
-        Assert.assertEquals(1, storedVersion2.getParent().getChilds().size());
+        Assert.assertEquals(1, storedTaskVersion2.getParent().getChilds().size());
 
         // = Ensure there are no children versions in version2
-        Assert.assertEquals(0, storedVersion2.getChilds().size());
+        Assert.assertEquals(0, storedTaskVersion2.getChilds().size());
     }
 }
