@@ -2,6 +2,7 @@ package com.dreamworks.example.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString(of = {"id"})
 @NodeEntity(label = "VERSION")
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true, exclude = {"task", "parent", "childs"})
 public class TaskVersion extends AbstractEntity implements UTI {
 
     @JsonManagedReference
@@ -40,8 +42,8 @@ public class TaskVersion extends AbstractEntity implements UTI {
         setTask(task);
         setCreatedOn(new Date());
 
-//        setParent(null);
-//        setChilds(new ArrayList<>());
+        setParent(null);
+        setChilds(new ArrayList<>());
 
         task.addTaskVersion(this);
     }
@@ -82,13 +84,4 @@ public class TaskVersion extends AbstractEntity implements UTI {
         return null;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

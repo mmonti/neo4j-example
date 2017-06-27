@@ -88,6 +88,12 @@ public class TaskServiceTests {
         // = Check that parent of version2 has a child.
         Assert.assertEquals(1, storedTaskVersion2.getParent().getChilds().size());
 
+        // FIXME: 6/27/17
+        // This last assert makes the test fail and we cannot find the root cause of the issue. If we inspect the query that is executed
+        // in line 86 we see:
+        // MATCH (n:`VERSION`) WHERE n.`id` = "d031ffb5-a24c-4007-b029-da14604d62ca@taskVersion" WITH n MATCH p=(n)-[*0..2]-(m) RETURN p, ID(n)
+        // If we c&p that statement in the browser we can see the results are correct and the nodes contains the relations we expect.
+
         // = Ensure there are no children versions in version2
         Assert.assertEquals(0, storedTaskVersion2.getChilds().size());
     }

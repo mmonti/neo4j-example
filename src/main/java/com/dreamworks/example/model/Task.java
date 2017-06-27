@@ -1,6 +1,7 @@
 package com.dreamworks.example.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString(of = {"id"})
 @NodeEntity(label = "TASK")
+@EqualsAndHashCode(callSuper = true, exclude = {"uti", "versions", "current"})
 public class Task extends AbstractEntity implements UTI {
 
     @Property
@@ -66,16 +68,6 @@ public class Task extends AbstractEntity implements UTI {
 
             setCurrent(taskVersion);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 
 }
